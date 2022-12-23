@@ -65,6 +65,8 @@ class ClsAlgoritmo:
                 if(i <= j):
                     continue
                 
+                if(len(rutas[i]) or len(rutas[j])):
+                    continue
                 # Buscando similitud con DTW
                 distance, path = fastdtw(rutas[i], rutas[j], dist=euclidean)
                 if(distance == 0):
