@@ -31,6 +31,11 @@ class ClsAlgoritmo:
                 if((distance >= UMBRAL_DISTANCIA) != estado_anterior):
                     estado_anterior = distance >= UMBRAL_DISTANCIA
                     ruta = ruta + 1
+                
+                time1 = df_temp.iloc[i, 2]
+                time2 = df_temp.iloc[i + 1, 2]
+                if(abs(time1-time2) > 500):
+                    ruta = ruta + 1
             except:
                 rutas.append(ruta)
         rutas[0] = rutas[1]
@@ -109,10 +114,10 @@ class ClsAlgoritmo:
             df_day = ClsUtils.getDataByDay(ClsAlgoritmo.df_datos,i)
             df_day= df_day.reset_index()
             df_day=df_day.drop(['index'], axis=1)
-            print("Identificando Rutas")
-            df_day = self.identificarRutas(df_day)
             print("Pre procesamiento")
             df_day = self.preprocesamiento(df_day)
+            print("Identificando Rutas")
+            df_day = self.identificarRutas(df_day)
             print("Encontrando Rutas Similares")
             similares = self.findSimilar(df_day)
             print("Asignando Rutas Similares")
