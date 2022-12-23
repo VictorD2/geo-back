@@ -65,7 +65,7 @@ class ClsAlgoritmo:
                 if(i <= j):
                     continue
                 
-                if(len(rutas[i]) or len(rutas[j])):
+                if(len(rutas[i]) == 0 or len(rutas[j]) == 0):
                     continue
                 # Buscando similitud con DTW
                 distance, path = fastdtw(rutas[i], rutas[j], dist=euclidean)
@@ -122,6 +122,7 @@ class ClsAlgoritmo:
             df_day = self.identificarRutas(df_day)
             print("Encontrando Rutas Similares")
             similares = self.findSimilar(df_day)
+            print(similares)
             print("Asignando Rutas Similares")
             df_day = self.asignarSimilitud(df_day, similares)
             print("Agregando al array")
