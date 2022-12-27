@@ -114,6 +114,8 @@ class ClsAlgoritmo:
         for i in days:
             print("Día: {}".format(i))
             df_day = ClsUtils.getDataByDay(ClsAlgoritmo.df_datos,i)
+            if(len(df_day) == 0):
+                continue
             df_day= df_day.reset_index()
             df_day=df_day.drop(['index'], axis=1)
             print("Pre procesamiento")
