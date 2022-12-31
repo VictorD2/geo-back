@@ -57,7 +57,7 @@ class ClsAlgoritmo:
     def findSimilar(self, df_temp):
         array_similares = []
         rutas = ClsUtils.separarRutas(df_temp)
-        UMBRAL_SIMILAR = 800
+        UMBRAL_SIMILAR = 1000
         tamanio = range(len(rutas))
         for i in tamanio:
             for j in tamanio:
