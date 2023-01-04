@@ -17,15 +17,24 @@ def allowed_file(filename):
 
 @app.route('/api/v1/archivo', methods=["POST"])
 def algoritmo():
+    print("Debug 1")
     if(request.headers.get("Authorization")==None):
+        print("Debug 2")
         return jsonify({"error":"JWT missing"})
+    print("Debug 3")
     token = request.headers.get("Authorization").replace("Bearer ","")
+    print("Debug 4")
     secret = config.get("JWT_SECRET")
+    print("Debug 5")
     print(secret)
     payload = jwt.decode(token, secret, algorithms=["HS256"])
+    print("Debug 6")
     user_id = payload.get("id")
+    print("Debug 7")
     dfs = ClsAlgoritmo.getDatos(user_id)
+    print("Debug 8")
     ClsAlgoritmo.df_datos = []
+    print("Debug 9")
     print("Respondiendo...")
     return jsonify({"success":"Procesado correctamente","datos": dfs})
 
