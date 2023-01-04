@@ -24,7 +24,7 @@ def algoritmo():
     print("Debug 3")
     token = request.headers.get("Authorization").replace("Bearer ","")
     print("Debug 4")
-    secret = "w63!$CJ$dy%$NwwjgH&BrE2Ctv@z4dQQc"
+    secret = config.get("JWT_SECRET")
     print("Debug 5")
     print(secret)
     payload = jwt.decode(token, secret, algorithms=["HS256"])
