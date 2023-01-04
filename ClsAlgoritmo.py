@@ -2,6 +2,9 @@ import pandas as pd
 from ClsUtils import ClsUtils
 from fastdtw import fastdtw
 from scipy.spatial.distance import euclidean
+from dotenv import dotenv_values
+import mysql.connector as sql
+config = dict(dotenv_values(".env"))
 
 days ={"Lunes":1,"Martes":2,"Miercoles":3,"Jueves":4,"Viernes":5,"Sabado":6}
 
@@ -11,9 +14,15 @@ class ClsAlgoritmo:
     def __init__(self):
         print("Iniciando")
       
-    def recoleccion(self,file):
-        df_datos = pd.read_csv(file,  names=['latitud', 'longitud', 'hora', 'dia',"id_user"], sep=', ', engine='python')
-        ClsAlgoritmo.df_datos=df_datos.drop(['id_user'], axis=1)
+    def recoleccion(self,user_id):
+        my_conn = sql.connect(
+            host = config.get("BD_HOST"),
+            user = config.get("BD_USER"),
+            passwd = config.get("BD_PASSWORD"),
+            database = config.get("BD_NAME")
+        )
+        my_data = pd.read_sql('SELECT latitude AS latitud,longitude AS longitud, time AS hora, day AS dia FROM Ubicacions WHERE userId = {}'.format(user_id),my_conn)
+        ClsAlgoritmo.df_datos= my_data
 
     def identificarRutas(self,df_temp):
         rutas = []
@@ -107,9 +116,9 @@ class ClsAlgoritmo:
                 break
         return ClsUtils.sortMatrix(array_agrupados) 
 
-    def getDatos(self,file):
+    def getDatos(self,user_id):
         dfs=[]
-        self.recoleccion(file)
+        self.recoleccion(user_id)
         # Separando por dias
         for i in days:
             print("Día: {}".format(i))

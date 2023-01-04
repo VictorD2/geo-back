@@ -1,11 +1,13 @@
 from flask_cors import CORS
 from flask import Flask, jsonify, send_file, request
 from ClsAlgoritmo import ClsAlgoritmo
+import jwt
+from dotenv import dotenv_values
 
 ClsAlgoritmo = ClsAlgoritmo()
 app = Flask(__name__)
 CORS(app)
-
+config = dict(dotenv_values(".env"))
 dataset= ""
 ALLOWED_EXTENSIONS = {'txt'}
 
@@ -15,18 +17,15 @@ def allowed_file(filename):
 
 @app.route('/api/v1/archivo', methods=["POST"])
 def algoritmo():
-    print(request.files)
-    if 'file' not in request.files:
-        return jsonify({"error":"No está el campo File"})
-    archivos = request.files.getlist("file") 
-    for file in archivos:
-        if allowed_file(file.filename):
-            dfs = ClsAlgoritmo.getDatos(file)
-            ClsAlgoritmo.df_datos = []
-            print("Respondiendo...")
-            return jsonify({"success":"Procesado correctamente","datos": dfs})
-        else:
-            return jsonify({"error": "Formato no aceptado"})
+    if(request.headers.get("Authorization")==None):
+        return jsonify({"error":"JWT missing"})
+    token = request.headers.get("Authorization").replace("Bearer ","")
+    payload = jwt.decode(token, config.get("JWT_SECRET"), algorithms=["HS256"])
+    user_id = payload.get("id")
+    dfs = ClsAlgoritmo.getDatos(user_id)
+    ClsAlgoritmo.df_datos = []
+    print("Respondiendo...")
+    return jsonify({"success":"Procesado correctamente","datos": dfs})
 
 
 if __name__ == '__main__':
