@@ -1,5 +1,5 @@
 from flask_cors import CORS
-from flask import Flask, jsonify, send_file, request
+from flask import Flask, jsonify, request
 from ClsAlgoritmo import ClsAlgoritmo
 import jwt
 from dotenv import dotenv_values
