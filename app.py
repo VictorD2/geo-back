@@ -20,7 +20,9 @@ def algoritmo():
     if(request.headers.get("Authorization")==None):
         return jsonify({"error":"JWT missing"})
     token = request.headers.get("Authorization").replace("Bearer ","")
-    payload = jwt.decode(token, config.get("JWT_SECRET"), algorithms=["HS256"])
+    secret = config.get("JWT_SECRET")
+    print(secret)
+    payload = jwt.decode(token, secret, algorithms=["HS256"])
     user_id = payload.get("id")
     dfs = ClsAlgoritmo.getDatos(user_id)
     ClsAlgoritmo.df_datos = []
